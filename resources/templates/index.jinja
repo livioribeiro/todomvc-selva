@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" data-framework="selva">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="A TodoMVC written in jQuery." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>TodoMVC: Selva</title>
+        <link rel="stylesheet" href="//unpkg.com/todomvc-common@1.0/base.css">
+        <link rel="stylesheet" href="//unpkg.com/todomvc-app-css@2.4/index.css">
+    </head>
+    <body>
+        <section id="todoapp" class="todoapp">
+            {% include "components/header.jinja" %}
+
+            {% include "components/main.jinja" %}
+
+            {% include "components/footer.jinja" %}
+        </section>
+        <footer id="info" class="info">
+            <p>Double-click to edit a todo</p>
+            <p>Created by <a href="http://sindresorhus.com">Sindre Sorhus</a></p>
+            <p>Updated by the TodoMVC Team</p>
+            <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+        </footer>
+        <!-- script src="//unpkg.com/todomvc-common@1.0/base.js"></script -->
+
+        <script>
+            function todoEditEventHandler(evt) {
+                const elem = evt.currentTarget;
+                elem.classList.add('editing');
+            }
+
+            for (const elem of document.querySelectorAll('ul#todo-list > li')) {
+                elem.addEventListener("dblclick", todoEditEventHandler)
+            }
+
+            function todoEditKeyUpEventHandler(evt) {
+                const elem = evt.currentTarget;
+                if (evt.key === 'Escape') {
+                    elem.parentElement.parentElement.classList.remove('editing');
+                }
+            }
+
+            for (const elem of document.querySelectorAll('ul#todo-list > li input.edit')) {
+                elem.addEventListener("keyup", todoEditKeyUpEventHandler)
+            }
+        </script>
+    </body>
+</html>

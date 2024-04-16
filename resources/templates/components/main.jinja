@@ -1,0 +1,39 @@
+{% macro todoitem(item) %}
+<li id="todo-{{ item.id }}" class="{% if item.is_completed %} completed{% endif %}" data-id="{{ item.id }}">
+    <div class="view">
+        <form action="/todo/{{ item.id }}/complete" method="post">
+            <input name="completed" type="checkbox"
+                   class="toggle"
+                   onchange="submit()"
+                   {% if item.is_completed %}checked{% endif %}/>
+            <label>{{ item.title }}</label>
+        </form>
+
+        <form action="todo/{{ item.id }}/delete" method="post">
+            <button class="destroy"></button>
+        </form>
+    </div>
+
+    <form action="/todo/{{ item.id }}/edit" method="post">
+        <input name="title" class="edit" value="{{ item.title }}" onkeyup="" />
+    </form>
+</li>
+{% endmacro %}
+
+<main id="main" class="main">
+    <div id="toggle-all-container" class="toggle-all-container">
+        <form action="/todo/complete_all" method="post">
+            <input name="completed" type="checkbox"
+                   id="toggle-all" class="toggle-all"
+                   onchange="submit()"
+                   {%- if active_todo_count == 0 %}checked{% endif %} />
+            <label for="toggle-all">Mark all as complete</label>
+        </form>
+    </div>
+
+    <ul id="todo-list" class="todo-list">
+    {% for item in todos %}
+        {{ todoitem(item) }}
+    {% endfor %}
+    </ul>
+</main>

@@ -1,0 +1,26 @@
+{% if todo_count %}
+<footer id="footer" class="footer">
+    <span id="todo-count" class="todo-count">
+        <strong>{{ active_todo_count }}</strong>
+        item{% if active_todo_count != 1 %}s{% endif %} left
+    </span>
+
+    <ul class="filters">
+        <li>
+            <a href="/" {% if filter == "all" %}class="selected"{% endif %}>All</a>
+        </li>
+        <li>
+            <a href="/?filter=active" {% if filter == "active" %}class="selected"{% endif %}>Active</a>
+        </li>
+        <li>
+            <a href="/?filter=completed" {% if filter == "completed" %}class="selected"{% endif %}>Completed</a>
+        </li>
+    </ul>
+
+    {% if completed_todo_count > 0 %}
+    <form action="/todo/delete_completed" method="post">
+        <button class="clear-completed">Clear completed</button>
+    </form>
+    {% endif %}
+</footer>
+{% endif %}

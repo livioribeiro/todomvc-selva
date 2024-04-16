@@ -1,0 +1,9 @@
+extensions:
+- selva.ext.data.sqlalchemy
+- selva.ext.templates.jinja
+
+data:
+  sqlalchemy:
+    connections:
+      default:
+        url: sqlite+aiosqlite:///db.sqlite3
