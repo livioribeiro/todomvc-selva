@@ -1,4 +1,4 @@
-from typing import Annotated as A
+from typing import Annotated
 
 from selva import di
 from sqlalchemy import delete, func, select, update
@@ -9,8 +9,8 @@ from .model import Base, Todo
 
 @di.service
 class TodoService:
-    engine: A[AsyncEngine, di.Inject]
-    sessionmaker: A[async_sessionmaker, di.Inject]
+    engine: Annotated[AsyncEngine, di.Inject]
+    sessionmaker: Annotated[async_sessionmaker, di.Inject]
 
     async def initialize(self):
         async with self.engine.connect() as conn:

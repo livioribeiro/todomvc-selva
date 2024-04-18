@@ -2,6 +2,9 @@ extensions:
 - selva.ext.data.sqlalchemy
 - selva.ext.templates.jinja
 
+middleware:
+- application.middleware.TodoFilterMiddleware
+
 data:
   sqlalchemy:
     connections:
