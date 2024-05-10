@@ -3,6 +3,7 @@ extensions:
 - selva.ext.templates.jinja
 
 middleware:
+- selva.web.middleware.request_id.RequestIdMiddleware
 - application.middleware.TodoFilterMiddleware
 
 data:

@@ -3,8 +3,11 @@ from typing import Annotated
 from selva import di
 from sqlalchemy import delete, func, select, update
 from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
+import structlog
 
 from .model import Base, Todo
+
+logger = structlog.get_logger()
 
 
 @di.service
@@ -43,6 +46,7 @@ class TodoService:
         async with self.sessionmaker() as session:
             session.add(todo)
             await session.commit()
+            logger.info("todo saved", title=todo.title)
 
     async def edit(self, todo_id: int, title: str):
         async with self.sessionmaker() as session:
@@ -50,6 +54,7 @@ class TodoService:
                 update(Todo).where(Todo.id == todo_id).values(title=title)
             )
             await session.commit()
+            logger.info("todo edited", id=todo_id, title=title)
 
     async def complete(self, todo_id: int, completed: bool):
         async with self.sessionmaker() as session:
@@ -57,21 +62,25 @@ class TodoService:
                 update(Todo).where(Todo.id == todo_id).values(is_completed=completed)
             )
             await session.commit()
+            logger.info("todo status changed", id=todo_id, completed=completed)
 
     async def complete_all(self, completed: bool):
         async with self.sessionmaker() as session:
             await session.execute(update(Todo).values(is_completed=completed))
             await session.commit()
+            logger.info("all todos status changed", completed=completed)
 
     async def delete(self, todo_id: int):
         async with self.sessionmaker() as session:
             await session.execute(delete(Todo).where(Todo.id == todo_id))
             await session.commit()
+            logger.info("todo deleted", id=todo_id)
 
     async def delete_completed(self):
         async with self.sessionmaker() as session:
             await session.execute(delete(Todo).where(Todo.is_completed == True))
             await session.commit()
+            logger.info("all completed todos deleted")
 
     async def count(self, is_completed: bool | None = None) -> int:
         async with self.sessionmaker() as session:

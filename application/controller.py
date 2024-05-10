@@ -27,6 +27,10 @@ class TodoController:
     async def redirect(request: Request):
         await respond_redirect_post_get(request.response, "/")
 
+    @web.get("/favicon.ico")
+    async def favicon(self, request: Request):
+        await respond_file(request.response, "resources/static/favicon.ico")
+
     @web.get
     async def index(self, request: Request):
         match todo_filter := request["todo_filter"]:
@@ -51,10 +55,6 @@ class TodoController:
         }
 
         await self.template.respond(request.response, "index.jinja", context)
-
-    @web.get("/favicon.ico")
-    async def favicon(self, request: Request):
-        await respond_file(request.response, "resources/static/favicon.ico")
 
     @web.post("todo")
     async def new_todo(self, request: Request, dto: TodoDTO):
